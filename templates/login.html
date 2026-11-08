@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Log in{% endblock %}
+{% block content %}<div class="auth-wrap"><div class="auth-card"><span class="eyebrow">WELCOME BACK</span><h2>Sign in to LogiTrack</h2><p class="text-secondary">Access your logistics workspace.</p>
+<form method="post"><div class="mb-3"><label class="form-label">Email address</label><input class="form-control" type="email" name="email" required autocomplete="username"></div><div class="mb-3"><label class="form-label">Password</label><input class="form-control" type="password" name="password" required autocomplete="current-password"></div><button class="btn btn-primary w-100 mt-2">Log in</button></form>
+<p class="small text-secondary mt-3 mb-0">Customer? <a href="{{ url_for('register') }}">Create an account</a></p><div class="demo-hint mt-3">Initial admin: admin@logistics.local / admin123</div></div></div>{% endblock %}

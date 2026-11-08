@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Shipments{% endblock %}
+{% block content %}<div class="page-heading"><div><span class="eyebrow">OPERATIONS</span><h2>Shipments</h2><p class="text-secondary mb-0">Manage and review package deliveries.</p></div>{% if logged_user.role == 'admin' %}<a class="btn btn-primary" href="{{ url_for('new_shipment') }}">＋ New shipment</a>{% endif %}</div>
+<div class="content-card mt-4"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Tracking number</th><th>Recipient</th>{% if logged_user.role != 'customer' %}<th>Customer</th><th>Rider</th>{% endif %}<th>Destination</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody>
+{% for s in shipments %}<tr><td class="fw-semibold">{{ s.tracking_number }}</td><td>{{ s.recipient_name }}</td>{% if logged_user.role != 'customer' %}<td>{{ s.customer_name }}</td><td>{{ s.rider_name or 'Unassigned' }}</td>{% endif %}<td>{{ s.destination }}</td><td><span class="status-pill">{{ s.status }}</span></td><td class="text-secondary small">{{ s.created_at }}</td><td><a class="table-link" href="{{ url_for('shipment_detail',shipment_id=s.id) }}">Open</a></td></tr>
+{% else %}<tr><td colspan="8" class="empty-state">No shipments found.</td></tr>{% endfor %}
+</tbody></table></div></div>{% endblock %}

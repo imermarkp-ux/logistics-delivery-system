@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">OVERVIEW</span><h2>Good day, {{ logged_user.name.split(' ')[0] }}.</h2><p class="text-secondary mb-0">Here is the latest activity in your logistics workspace.</p></div>{% if logged_user.role == 'admin' %}<a class="btn btn-primary" href="{{ url_for('new_shipment') }}">＋ New shipment</a>{% endif %}</div>
+<div class="row g-3 mt-2">
+ {% for label,value,sub,icon in [('Total shipments',total,'All recorded shipments','▤'),('Delivered',delivered,'Successfully completed','✓'),('Active deliveries',active,'Currently in progress','↗'),('Needs attention',failed,'Failed or returned','!')] %}
+ <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-top"><span>{{ label }}</span><span class="stat-icon">{{ icon }}</span></div><div class="stat-number">{{ value }}</div><div class="stat-sub">{{ sub }}</div></div></div>
+ {% endfor %}
+</div>
+<div class="content-card mt-4"><div class="section-head"><div><h5>Recent shipments</h5><p>Latest shipment records available to your account.</p></div><a href="{{ url_for('shipments') }}">View all →</a></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Tracking number</th><th>Recipient</th>{% if logged_user.role != 'customer' %}<th>Customer</th>{% endif %}<th>Status</th><th>Updated</th><th></th></tr></thead><tbody>
+{% for s in recent %}<tr><td class="fw-semibold">{{ s.tracking_number }}</td><td>{{ s.recipient_name }}</td>{% if logged_user.role != 'customer' %}<td>{{ s.customer_name }}</td>{% endif %}<td><span class="status-pill">{{ s.status }}</span></td><td class="text-secondary small">{{ s.updated_at }}</td><td><a class="table-link" href="{{ url_for('shipment_detail',shipment_id=s.id) }}">Details</a></td></tr>
+{% else %}<tr><td colspan="6" class="empty-state">No shipments yet.</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

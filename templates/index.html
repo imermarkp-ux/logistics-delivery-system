@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero-panel">
+ <div class="row align-items-center g-4">
+  <div class="col-lg-7">
+   <span class="eyebrow">LOGISTICS MANAGEMENT PLATFORM</span>
+   <h1>Deliveries, organized.<br><span class="text-accent">Visibility, simplified.</span></h1>
+   <p class="lead text-secondary mt-3">Manage shipments, coordinate riders, and give customers a clear view of every delivery from pickup to arrival.</p>
+   <div class="d-flex gap-2 flex-wrap mt-4"><a class="btn btn-primary btn-lg" href="{{ url_for('login') }}">Open dashboard</a><a class="btn btn-outline-secondary btn-lg" href="{{ url_for('track') }}">Track a package</a></div>
+  </div>
+  <div class="col-lg-5"><div class="hero-visual"><div class="route-line"></div><div class="route-node node-a">↗</div><div class="route-node node-b">✓</div><div class="package-card"><div class="package-icon">▣</div><div><b>Shipment in motion</b><small>Track every step in one place</small></div><span class="live-dot"></span></div><div class="mini-stat"><small>DELIVERY STATUS</small><strong>In Transit</strong><span>Updates recorded by your team</span></div></div></div>
+ </div>
+</section>
+<div class="row g-3 mt-3">
+ <div class="col-md-4"><div class="feature-card"><div class="feature-icon">01</div><h5>Shipment control</h5><p>Create shipments, assign riders, and maintain a reliable status history.</p></div></div>
+ <div class="col-md-4"><div class="feature-card"><div class="feature-icon">02</div><h5>Rider coordination</h5><p>Give delivery staff a focused view of their assigned packages.</p></div></div>
+ <div class="col-md-4"><div class="feature-card"><div class="feature-icon">03</div><h5>Customer tracking</h5><p>Let customers check shipment progress with a tracking number.</p></div></div>
+</div>
+{% endblock %}
