@@ -5,6 +5,9 @@ from functools import wraps
 from contextlib import contextmanager
 from datetime import datetime
 
+from flask import Flask
+
+app = Flask(__name__)
 from flask import (
     Flask, render_template, request, redirect,
     url_for, session, flash, abort
