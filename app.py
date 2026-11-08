@@ -5,14 +5,14 @@ from functools import wraps
 from contextlib import contextmanager
 from datetime import datetime
 
-from flask import Flask
-
-app = Flask(__name__)
 from flask import (
     Flask, render_template, request, redirect,
     url_for, session, flash, abort
 )
 from werkzeug.security import generate_password_hash, check_password_hash
+
+# Create exactly one Flask application instance at module level.
+app = Flask(__name__)
 
 
 # ==========================================
@@ -28,8 +28,6 @@ DB_PATH = os.environ.get(
     "/tmp/logistics.db" if IS_VERCEL
     else os.path.join(BASE_DIR, "logistics.db")
 )
-
-app = Flask(__name__)
 
 app.secret_key = os.environ.get(
     "SECRET_KEY",
