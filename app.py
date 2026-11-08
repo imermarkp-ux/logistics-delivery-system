@@ -46,9 +46,6 @@ app.config.update(
 
 @contextmanager
 def get_db():
-    db_dir = os.path.dirname(DB_PATH)
-    if db_dir:
-        os.makedirs(db_dir, exist_ok=True)
     conn = sqlite3.connect(DB_PATH, timeout=20)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -121,45 +118,39 @@ def init_db():
         );
         """)
 
-        # Ensure the configured initial admin exists on every fresh
-        # serverless instance. Set ADMIN_EMAIL and ADMIN_PASSWORD in Vercel
-        # Environment Variables. The fallback is for initial testing only.
-        admin_email = os.environ.get(
-            "ADMIN_EMAIL", "admin@logistics.local"
-        ).strip().lower()
-        admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
-        admin_name = os.environ.get(
-            "ADMIN_NAME", "System Administrator"
-        )
-
-        existing_admin = db.execute(
-            "SELECT id FROM users WHERE email=?",
-            (admin_email,)
+        admin = db.execute(
+            "SELECT id FROM users WHERE role='admin' LIMIT 1"
         ).fetchone()
 
-        if existing_admin:
-            # Repair an old account whose password was created incorrectly.
-            db.execute("""
-                UPDATE users
-                SET name=?, password_hash=?, role='admin'
-                WHERE email=?
-            """, (
-                admin_name,
-                generate_password_hash(admin_password),
-                admin_email
-            ))
-        else:
-            db.execute("""
-                INSERT INTO users
-                (name, email, password_hash, role, created_at)
-                VALUES (?, ?, ?, ?, ?)
-            """, (
-                admin_name,
-                admin_email,
-                generate_password_hash(admin_password),
-                "admin",
-                now()
-            ))
+        if not admin:
+
+            admin_email = os.environ.get(
+                "ADMIN_EMAIL",
+                "admin@logistics.local"
+            )
+
+            admin_password = os.environ.get("ADMIN_PASSWORD")
+
+            # Development-only default administrator
+            if not IS_VERCEL and not admin_password:
+                admin_password = "admin123"
+
+            if admin_password:
+
+                db.execute("""
+                    INSERT INTO users
+                    (name, email, password_hash, role, created_at)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (
+                    os.environ.get(
+                        "ADMIN_NAME",
+                        "System Administrator"
+                    ),
+                    admin_email.lower(),
+                    generate_password_hash(admin_password),
+                    "admin",
+                    now()
+                ))
 
 
 # ==========================================
